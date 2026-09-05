@@ -186,7 +186,7 @@ const AK_TOOLS = {
     label: '视频转换', icon: 'movie',
     desc: '基于 FFmpeg.wasm 在本地转码视频，支持 21 种容器格式。首次加载引擎约需 30 秒（之后有本地缓存，秒开）。',
     accept: AK_FORMATS.acceptFor('video'),
-    targets: ['mp4', 'mkv', 'mov', 'webm', 'avi', 'gif', 'flv', 'f4v', 'wmv', 'mpg', 'm4v', '3gp', '3g2', 'ts', 'm2ts', 'vob', 'asf', 'ogv', 'mxf'],
+    targets: ['mp4', 'mkv', 'mov', 'webm', 'avi', 'gif', 'flv', 'f4v', 'wmv', 'mpg', 'm4v', '3gp', '3g2', 'ts', 'm2ts', 'vob', 'asf', 'ogv', 'mxf', 'prores'],
     defaultTarget: 'mp4',
     options: [
       { group: '视频参数', fields: [

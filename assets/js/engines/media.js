@@ -74,6 +74,22 @@ const AKMedia = (() => {
   /* 输出扩展名与工具 target 不同名的情形 */
   const OUT_EXT = { prores: 'mov' };
 
+  /* H.263（3GP/3G2）只接受这些标准尺寸，其他尺寸编码器会初始化失败 */
+  const H263_SIZES = [[128, 96], [176, 144], [352, 288], [704, 576], [1408, 1152]];
+
+  function h263Size(vsize) {
+    if (vsize) {
+      const [w, h] = vsize.split('x').map(Number);
+      let best = H263_SIZES[0], diff = Infinity;
+      for (const s of H263_SIZES) {
+        const d = Math.abs(s[0] * s[1] - w * h);
+        if (d < diff) { diff = d; best = s; }
+      }
+      return best.join('x');
+    }
+    return '176x144';
+  }
+
   /* ── 引擎加载状态 ────────────────────────────────────── */
   const CORE_VER = '0.12.6';
   const CACHE_NAME = 'ak-ffmpeg-' + CORE_VER;
@@ -225,6 +241,14 @@ const AKMedia = (() => {
     throw new Error(errLine ? errLine.slice(0, 200) : `FFmpeg 处理失败（${stage}，exit ${ret}）`);
   }
 
+  /** exec 失败可能污染 wasm 实例（典型症状：后续报 memory access out of
+   *  bounds），因此失败后终止并重建引擎，保证下一次转换正常。 */
+  async function resetEngine() {
+    try { ffmpeg && ffmpeg.terminate(); } catch {}
+    ffmpeg = null;
+    loadPromise = null;
+  }
+
   /** 公共执行流程：写输入 → exec → 读输出 → 清理 */
   async function runFFmpeg(file, args, outName, mime, onProgress) {
     const ff = await load();
@@ -237,6 +261,9 @@ const AKMedia = (() => {
       const data = await ff.readFile(outName);
       if (!data || !data.length) throw new Error('FFmpeg 输出为空');
       return new Blob([data.buffer || data], { type: mime });
+    } catch (e) {
+      await resetEngine();
+      throw e;
     } finally {
       progressSink = null;
       ff.deleteFile(inName).catch(() => {});
@@ -261,8 +288,8 @@ const AKMedia = (() => {
     } else {
       args.push(...(VIDEO_ARGS[target] || VIDEO_ARGS.mp4));
       if (target === '3gp' || target === '3g2') {
-        // h263 需要宽高为 4 的倍数
-        args.push('-vf', opts.vsize ? 'scale=' + opts.vsize : 'scale=trunc(iw/4)*4:trunc(ih/4)*4');
+        // h263 只接受标准尺寸，按所选分辨率就近取档
+        args.push('-vf', 'scale=' + h263Size(opts.vsize));
       } else if (opts.vsize) {
         args.push('-vf', 'scale=' + opts.vsize);
       }

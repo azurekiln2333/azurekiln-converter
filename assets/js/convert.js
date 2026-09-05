@@ -257,7 +257,9 @@
     renderFileList();
 
     const opts = collectOpts();
-    state.results = state.files.map(f => ({ inName: f.name, outName: '', status: 'pending', blob: null }));
+    state.results = state.tool === 'zip'
+      ? [{ inName: '', outName: '', status: 'pending', blob: null }]
+      : state.files.map(f => ({ inName: f.name, outName: '', status: 'pending', blob: null }));
     renderResults();
 
     try { await ensureEngines(); } catch (e) {
