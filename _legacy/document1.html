@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="¡Convierta archivos de documentos sin conexión en su navegador web sin descargar software ni cargar archivos! Sin límites de número de archivos.">
+<title>Convertir documentos sin conexión en el navegador</title>
+<link href="static/css/css.css" rel="stylesheet">
+<link href="static/css/bootstrap.min.css" rel="stylesheet">
+<link href="static/css/main.min.css" rel="stylesheet">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7009009024834738" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="page-container">
+  <div class="page-header">
+    <nav class="navbar navbar-expand-lg d-flex justify-content-between">
+      <div class="" id="navbarNav">
+        <ul class="navbar-nav" id="leftNav">
+          <li class="nav-item"><a class="nav-link" id="sidebar-toggle" href="javascript:void(0)"><i data-feather="arrow-left"></i></a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html">OfflineConverter.com</a></li>
+        </ul>
+      </div>
+      <div class="" id="headerNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="faq1.html" title="Preguntas más frecuentes"><i data-feather="help-circle"></i></a></li>
+          <li class="nav-item dropdown"><a class="nav-link search-dropdown" href="javascript:void(0)" id="languageDropDown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Languages"><i data-feather="globe"></i></a>
+            <div class="dropdown-menu dropdown-menu-end profile-drop-menu" aria-labelledby="languageDropDown">
+              <a class="dropdown-item" href="index.html">English</a><a class="dropdown-item" href="es.html">Español</a><a class="dropdown-item" href="pt.html">Português</a><a class="dropdown-item" href="jp.html">日本語</a><a class="dropdown-item" href="cn.html">中文简体</a><a class="dropdown-item" href="tw.html">中文繁體</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="page-sidebar">
+    <ul class="list-unstyled accordion-menu">
+      <li class="sidebar-title">Páginas de índice</li>
+      <li><a href="es.html"><i data-feather="home"></i>Índice</a></li>
+      <li><a href="format1.html"><i data-feather="layers"></i>Formatos</a></li>
+      <li><a href="tools1.html"><i data-feather="edit"></i>Herramientas</a></li>
+      <li class="sidebar-title">Convertidores sin conexión</li>
+      <li><a href="image1.html"><i data-feather="image"></i>Imagen</a></li>
+      <li><a href="video1.html"><i data-feather="film"></i>Video</a></li>
+      <li><a href="audio1.html"><i data-feather="volume-2"></i>Audio</a></li>
+      <li class="active-page"><a href=""><i data-feather="file-text"></i>Documento</a></li>
+      <li class="sidebar-title">Conversores en línea</li>
+      <li><a href="https://www.aconvert.com/es/image/"><i data-feather="image"></i>Imagen</a></li>
+      <li><a href="https://www.aconvert.com/es/video/"><i data-feather="film"></i>Video</a></li>
+      <li><a href="https://www.aconvert.com/es/audio/"><i data-feather="volume-2"></i>Audio</a></li>
+      <li><a href="https://www.aconvert.com/es/document/"><i data-feather="file-text"></i>Documento</a></li>
+    </ul>
+  </div>
+  <div class="page-content">
+    <div class="main-wrapper">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Conversor de documentos sin conexión</h5>
+              <p class="card-description">¡Convierta archivos de documentos sin conexión en su navegador web sin descargar software ni cargar archivos! </p>
+              <form>
+                <br>
+                <div class="row mb-3">
+                  <label for="localfiles" class="col-sm-2 col-form-label">Archivos:</label>
+                  <div class="col-sm-10">
+                    <input class="form-control" type="file" id="localfiles" accept="application/pdf,.pdf" multiple="">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="targetformat" class="col-sm-2 col-form-label">Objetivo:</label>
+                  <div class="col-sm-10">
+                    <select class="form-select" name="targetformat" id="targetformat">
+                      <option value="jpg" selected="">JPG</option>
+                      <option value="png">PNG</option>
+                      <option value="webp">WEBP</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="dpi" class="col-sm-2 col-form-label">DPI:</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control" id="dpi" min="1" max="10000" value="300">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="imagequality" class="col-sm-2 col-form-label">Calidad:</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control" id="imagequality" min="1" max="100">
+                  </div>
+                </div><br>
+                <div class="d-grid gap-2">
+                  <button type="button" class="btn btn-danger btn-block" onclick="batchconversion()" id="convertbutton"> CONVERTIR SIN CONEXIÓN </button>
+                </div>
+              </form>
+              <br><hr><br>
+              <div class="mb-5">
+              	<div class="section-left">ARCHIVOS DE SALIDA:</div>
+              	<div class="section-right">
+               	  <button type="button" class="btn btn-sm btn-secondary" onclick="addtoZip()">COMPRIMIR ARCHIVOS</button>
+               	</div>
+              </div>
+              <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre de archivo</th>
+                    <th scope="col">Tamaño del archivo</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="outputfiles">
+                </tbody>
+              </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Cómo usar</h5>
+              <p class="card-description">Elija archivos de documentos locales, elija el formato de imagen de destino al que desea convertir, luego haga clic en el botón "CONVERTIR SIN CONEXIÓN" para iniciar conversiones sin conexión en masa. Cada archivo puede tener hasta 2 GB. </p>
+              <p>Tenga en cuenta que este convertidor de documentos sin conexión solo admite algunas conversiones, como PDF a JPG, PDF a PNG y PDF a WEBP. Usa el <a href="https://www.aconvert.com/es/document/">conversor en línea</a> para obtener más conversiones.</p>
+              <p>Estos son los principales formatos de documentos admitidos:</p>
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Formato</th>
+                      <th scope="col">Nombre del formato</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td><a href="/es/format/pdf/"><strong>PDF</strong></a></td>
+                      <td>Portable Document Format</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              Copyright &copy; 2024 Offline Converter (frente a <a href="https://www.aconvert.com/es/">convertidor en línea</a>). Reservados todos los derechos. <a href="privacy.html" rel="nofollow">Política de privacidad</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="static/js/jquery.min.js"></script>
+<script src="static/js/bootstrap.bundle.min.js"></script>
+<script src="static/js/main.min.js"></script>
+<script src="static/js/pdf.js"></script>
+<script src="static/js/document.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html class="light" lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta name="description" content="AzureKiln 离线转换器：在浏览器本地转换图片、视频、音频和文档，无需下载软件，文件不上传服务器。" />
+  <title>AzureKiln Converter - 浏览器本地离线转换</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+  <script src="assets/tailwind.js"></script>
+  <script src="assets/tailwind.config.js"></script>
+  <link href="assets/css/site.css" rel="stylesheet" />
+</head>
+
+<body class="bg-[#f7f9fb] dark:bg-slate-950 text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+  <div id="ak-header"></div>
+
+  <main class="pt-0">
+
+    <!-- ── Hero ─────────────────────────────────── -->
+    <section class="relative px-8 py-20 md:py-28 flex flex-col items-center text-center max-w-7xl mx-auto overflow-hidden">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-primary/5 to-transparent rounded-full blur-3xl -z-10"></div>
+      <span class="font-label text-xs tracking-[0.2em] text-primary mb-6 block uppercase">Private · Local · Fast</span>
+      <h1 class="font-headline text-4xl md:text-6xl font-extrabold tracking-tighter text-on-surface mb-8 max-w-4xl leading-tight">
+        文件不出浏览器，<br class="hidden md:block" />转换本该如此安心</h1>
+      <p class="font-body text-lg text-secondary max-w-2xl leading-relaxed mb-10">
+        图片、视频、音频、文档——全部通过 WebAssembly 在你的设备本地完成转换，无需下载软件，更不会上传到任何服务器。</p>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="convert.html"
+          class="px-8 py-4 bg-[#005ab7] text-white rounded-xl font-bold hover:opacity-90 transition-all transform active:scale-95 shadow-lg shadow-primary/20">立即开始转换</a>
+        <a href="#compare"
+          class="px-8 py-4 bg-surface-container-high text-on-secondary-container rounded-xl font-bold hover:bg-surface-container-highest transition-all transform active:scale-95">了解离线转换</a>
+      </div>
+    </section>
+
+    <!-- ── 转换工具 ──────────────────────────────── -->
+    <section class="px-8 py-10 max-w-7xl mx-auto" id="tools-grid">
+      <div class="text-center mb-10">
+        <h2 class="font-headline text-2xl font-bold mb-4 text-on-surface">六大转换工具</h2>
+        <div class="w-12 h-1 bg-primary mx-auto rounded-full"></div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- ── 隐私三要点 ────────────────────────────── -->
+    <section class="px-8 py-12 max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="trust-grid"></div>
+    </section>
+
+    <!-- ── 离线 vs 在线对比 ──────────────────────── -->
+    <section class="px-8 py-16 max-w-7xl mx-auto" id="compare">
+      <div class="text-center mb-10">
+        <h2 class="font-headline text-2xl font-bold mb-4 text-on-surface">离线转换器 vs 在线转换器</h2>
+        <div class="w-12 h-1 bg-primary mx-auto rounded-full"></div>
+      </div>
+      <div class="bg-surface-container-lowest rounded-3xl border border-outline-variant/20 p-6 md:p-8 overflow-x-auto">
+        <table class="ak-table min-w-[640px]">
+          <thead>
+            <tr>
+              <th>对比项</th>
+              <th class="text-[#005ab7]">本离线转换器</th>
+              <th>传统在线转换器</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="font-bold">文件隐私</td>
+              <td class="text-[#005ab7] font-bold">最大程度保护隐私，所有文件均在本地转换</td>
+              <td>文件将上传到对方服务器进行转换</td>
+            </tr>
+            <tr>
+              <td class="font-bold">文件大小</td>
+              <td class="text-[#005ab7] font-bold">最大约 2 GB（取决于设备内存）</td>
+              <td>通常最大 200 MB</td>
+            </tr>
+            <tr>
+              <td class="font-bold">转换时间</td>
+              <td class="text-[#005ab7] font-bold">不限时</td>
+              <td>通常最长 10 分钟</td>
+            </tr>
+            <tr>
+              <td class="font-bold">转换速度</td>
+              <td class="text-[#005ab7] font-bold">由本机 CPU 决定，通常更快</td>
+              <td>受服务器排队与带宽限制</td>
+            </tr>
+            <tr>
+              <td class="font-bold">资源占用</td>
+              <td>占用本机 CPU 与内存</td>
+              <td class="text-[#005ab7] font-bold">不占用本机资源</td>
+            </tr>
+            <tr>
+              <td class="font-bold">浏览器要求</td>
+              <td>需支持 WebAssembly 的现代浏览器</td>
+              <td class="text-[#005ab7] font-bold">各类浏览器均可</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── 支持的格式一览 ────────────────────────── -->
+    <section class="px-8 py-12 max-w-7xl mx-auto">
+      <div class="bg-surface-container-low/60 rounded-[2.5rem] border border-outline-variant/10 p-10 md:p-16">
+        <div class="text-center mb-10">
+          <span class="font-label text-xs tracking-[0.2em] text-primary uppercase block mb-3">110+ Formats</span>
+          <h2 class="font-headline text-3xl font-extrabold mb-4 text-on-surface">110+ 种文件格式</h2>
+          <div class="w-12 h-1 bg-primary mx-auto rounded-full"></div>
+          <p class="text-secondary max-w-2xl mx-auto mt-6 leading-loose">
+            从常见的 JPG、MP4、MP3、PDF，到专业的 HEIC、PSD、CR2、MKV，转换器内置 ImageMagick 与 FFmpeg 双引擎，
+            覆盖图片、视频、音频、文档四大类别的读取与输出。</p>
+        </div>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="formats.html"
+            class="px-6 py-3 rounded-full bg-primary/5 text-primary font-bold text-sm hover:bg-primary/10 transition-colors flex items-center gap-2">
+            <span class="material-symbols-outlined text-base" data-icon="layers">layers</span> 查看全部支持格式
+          </a>
+          <a href="faq.html"
+            class="px-6 py-3 rounded-full bg-primary/5 text-primary font-bold text-sm hover:bg-primary/10 transition-colors flex items-center gap-2">
+            <span class="material-symbols-outlined text-base" data-icon="help">help</span> 常见问题
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="ak-footer"></div>
+
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/index.js"></script>
+</body>
+
+</html>

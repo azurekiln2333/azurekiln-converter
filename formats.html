@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html class="light" lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta name="description" content="AzureKiln 离线转换器支持的全部文件格式：图片、视频、音频、文档，含读写能力与转换关系。" />
+  <title>支持格式 - AzureKiln Converter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+  <script src="assets/tailwind.js"></script>
+  <script src="assets/tailwind.config.js"></script>
+  <link href="assets/css/site.css" rel="stylesheet" />
+</head>
+
+<body class="bg-[#f7f9fb] dark:bg-slate-950 text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+  <div id="ak-header"></div>
+
+  <main class="pt-0">
+
+    <section class="relative px-8 pt-16 pb-8 flex flex-col items-center text-center max-w-7xl mx-auto">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-gradient-to-b from-primary/5 to-transparent rounded-full blur-3xl -z-10"></div>
+      <span class="font-label text-xs tracking-[0.2em] text-primary mb-5 block uppercase">Formats</span>
+      <h1 class="font-headline text-3xl md:text-5xl font-extrabold tracking-tighter text-on-surface mb-5">支持的文件格式</h1>
+      <p class="text-secondary max-w-2xl leading-relaxed">点击任意格式可展开详情，并直接跳转到对应的转换工具。</p>
+    </section>
+
+    <section class="px-8 py-8 max-w-7xl mx-auto" id="format-groups"></section>
+
+  </main>
+
+  <div id="ak-footer"></div>
+
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/formats.js"></script>
+</body>
+
+</html>

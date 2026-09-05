@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ファイルをアップロードせずに画像をオフラインに変換します！画像ファイルごとに最大2 GB、ファイル制限なし！">
+<title>ファイルをアップロードせずに画像をオフラインに変換します！</title>
+<link href="static/css/css.css" rel="stylesheet">
+<link href="static/css/bootstrap.min.css" rel="stylesheet">
+<link href="static/css/main.min.css" rel="stylesheet">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7009009024834738" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="page-container">
+  <div class="page-header">
+    <nav class="navbar navbar-expand-lg d-flex justify-content-between">
+      <div class="" id="navbarNav">
+        <ul class="navbar-nav" id="leftNav">
+          <li class="nav-item"><a class="nav-link" id="sidebar-toggle" href="javascript:void(0)"><i data-feather="arrow-left"></i></a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html">OfflineConverter.com</a></li>
+        </ul>
+      </div>
+      <div class="" id="headerNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="faq3.html" title="よくある質問"><i data-feather="help-circle"></i></a></li>
+          <li class="nav-item dropdown"><a class="nav-link search-dropdown" href="javascript:void(0)" id="languageDropDown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="言語"><i data-feather="globe"></i></a>
+            <div class="dropdown-menu dropdown-menu-end profile-drop-menu" aria-labelledby="languageDropDown">
+              <a class="dropdown-item" href="index.html">English</a><a class="dropdown-item" href="es.html">Español</a><a class="dropdown-item" href="pt.html">Português</a><a class="dropdown-item" href="jp.html">日本語</a><a class="dropdown-item" href="cn.html">中文简体</a><a class="dropdown-item" href="tw.html">中文繁體</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="page-sidebar">
+    <ul class="list-unstyled accordion-menu">
+      <li class="sidebar-title">インデックスページ</li>
+      <li><a href="jp.html"><i data-feather="home"></i>ホーム</a></li>
+      <li><a href="format3.html"><i data-feather="layers"></i>フォーマット</a></li>
+      <li><a href="tools3.html"><i data-feather="edit"></i>ツール</a></li>
+      <li class="sidebar-title">オフラインコンバータ</li>
+      <li class="active-page"><a href=""><i data-feather="image"></i>画像</a></li>
+      <li><a href="video3.html"><i data-feather="film"></i>ビデオ</a></li>
+      <li><a href="audio3.html"><i data-feather="volume-2"></i>オーディオ</a></li>
+      <li><a href="document3.html"><i data-feather="file-text"></i>ドキュメント</a></li>
+      <li class="sidebar-title">オンラインコンバーター</li>
+      <li><a href="https://www.aconvert.com/jp/image/"><i data-feather="image"></i>画像</a></li>
+      <li><a href="https://www.aconvert.com/jp/video/"><i data-feather="film"></i>ビデオ</a></li>
+      <li><a href="https://www.aconvert.com/jp/audio/"><i data-feather="volume-2"></i>オーディオ</a></li>
+      <li><a href="https://www.aconvert.com/jp/document/"><i data-feather="file-text"></i>ドキュメント</a></li>
+    </ul>
+  </div>
+  <div class="page-content">
+    <div class="main-wrapper">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">オフラインイメージコンバーター</h5>
+              <p class="card-description">ファイルをアップロードせずに画像をオフラインに変換します。</p>
+              <form>
+                <br>
+                <div class="row mb-3">
+                  <label for="localfiles" class="col-sm-2 col-form-label">ローカルファイル：</label>
+                  <div class="col-sm-10">
+                    <input class="form-control" type="file" id="localfiles" multiple="">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="targetformat" class="col-sm-2 col-form-label">ターゲットフォーマット：</label>
+                  <div class="col-sm-10">
+                    <select class="form-select" name="targetformat" id="targetformat">
+                      <option value="jpg" selected="">JPG</option>
+                      <option value="png">PNG</option>
+                      <option value="webp">WEBP</option>
+                      <option value="svg">SVG</option>
+                      <option value="gif">GIF</option>
+                      <option value="dds">DDS</option>
+                      <option value="tiff">TIFF</option>
+                      <option value="bmp">BMP</option>
+                      <option value="eps">EPS</option>
+                      <option value="pcl">PCL</option>
+                      <option value="tga">TGA</option>
+                      <option value="ico">ICO</option>
+                      <option value="pnm">PNM</option>
+                      <option value="psd">PSD</option>
+                      <option value="jp2">JP2</option>
+                      <option value="pdf">PDF</option>
+                      <option value="ps">PS</option>
+                      <option value="ps2">PS2</option>
+                      <option value="ps3">PS3</option>
+                      <option value="qoi">QOI</option>
+                      <option value="ppm">PPM</option>
+                      <option value="ptif">PTIF</option>
+                      <option value="pict">PICT</option>
+                      <option value="pam">PAM</option>
+                      <option value="pbm">PBM</option>
+                      <option value="pcx">PCX</option>
+                      <option value="pdb">PDB</option>
+                      <option value="pcd">PCD</option>
+                      <option value="pfm">PFM</option>
+                      <option value="pgm">PGM</option>
+                      <option value="vicar">VICAR</option>
+                      <option value="viff">VIFF</option>
+                      <option value="wbmp">WBMP</option>
+                      <option value="xbm">XBM</option>
+                      <option value="xpm">XPM</option>
+                      <option value="uyvy">UYVY</option>
+                      <option value="uil">UIL</option>
+                      <option value="sgi">SGI</option>
+                      <option value="sun">SUN</option>
+                      <option value="aai">AAI</option>
+                      <option value="dcx">DCX</option>
+                      <option value="dib">DIB</option>
+                      <option value="dpx">DPX</option>
+                      <option value="epdf">EPDF</option>
+                      <option value="epi">EPI</option>
+                      <option value="eps2">EPS2</option>
+                      <option value="eps3">EPS3</option>
+                      <option value="epsi">EPSI</option>
+                      <option value="avs">AVS</option>
+                      <option value="cin">CIN</option>
+                      <option value="cmyk">CMYK</option>
+                      <option value="cmyka">CMYKA</option>
+                      <option value="epsf">EPSF</option>
+                      <option value="ept">EPT</option>
+                      <option value="exr">EXR</option>
+                      <option value="fax">FAX</option>
+                      <option value="j2c">J2C</option>
+                      <option value="j2k">J2K</option>
+                      <option value="jpeg">JPEG</option>
+                      <option value="miff">MIFF</option>
+                      <option value="mono">MONO</option>
+                      <option value="mng">MNG</option>
+                      <option value="mpc">MPC</option>
+                      <option value="mtv">MTV</option>
+                      <option value="otb">OTB</option>
+                      <option value="gray">GRAY</option>
+                      <option value="hdr">HDR</option>
+                      <option value="jng">JNG</option>
+                      <option value="hrz">HRZ</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="imagewidth" class="col-sm-2 col-form-label">画像サイズ：</label>
+                  <div class="col-sm-10">
+                    <div class="row">
+                      <div class="col">
+                        <input type="number" class="form-control" placeholder="幅" id="imagewidth">
+                      </div>
+                      <div class="col">
+                        <input type="number" class="form-control" placeholder="高い" id="imageheight">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="imagequality" class="col-sm-2 col-form-label">画質：</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control" id="imagequality" min="1" max="100">
+                  </div>
+                </div>
+                <br>
+                <div class="d-grid gap-2">
+                  <button type="button" class="btn btn-danger btn-block" onclick="batchconversion()" id="convertbutton"> オフライン変換 </button>
+                </div>
+              </form>
+              <br><hr><br>
+              <div class="mb-5">
+              	<div class="section-left">出力ファイル：</div>
+              	<div class="section-right">
+               	  <button type="button" class="btn btn-sm btn-secondary" onclick="addtoZip()">ファイルを圧縮</button>
+               	</div>
+              </div>
+              <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ファイル名</th>
+                    <th scope="col">ファイルサイズ</th>
+                    <th scope="col">操作</th>
+                  </tr>
+                </thead>
+                <tbody id="outputfiles">
+                </tbody>
+              </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">指示</h5>
+              <p class="card-description">ローカル画像ファイルを選択し、変換するターゲット画像形式を選択してから、[オフライン変換]ボタンをクリックしてバッチオフライン変換を開始します。 各ファイルは最大2GBです。 このオフラインコンバーターは、最初に画像を変換するためにWebブラウザーのキャンバスを使用しようとします。 画像形式は、現在のWebブラウザがサポートしているかどうかによって異なります。 例：最新のChromeブラウザはAVIFイメージをサポートしていますが、古いバージョンはサポートしていません。 次に、現在のWebブラウザーが画像形式をサポートしていない場合、オフラインコンバーターはJavascriptを使用して画像を変換しようとします。 このオフラインコンバーターがWebブラウザーで変換できない場合は、代わりに<a href="https://www.aconvert.com/jp/image/">オンラインコンバーター</a>を使用してください。</p>
+              <p>サポートされている主な画像形式は次のとおりです。</p>
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">フォーマット</th>
+                      <th scope="col">フォーマット名</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td><a href="/jp/format/jpg/"><strong>JPG</strong></a></td>
+                      <td>Joint Photographic Experts Group</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td><a href="/jp/format/png/"><strong>PNG</strong></a></td>
+                      <td>Portable Network Graphics</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td><a href="/jp/format/webp/"><strong>WEBP</strong></a></td>
+                      <td>Weppy Image Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">4</th>
+                      <td><a href="/jp/format/gif/"><strong>GIF</strong></a></td>
+                      <td>CompuServe Graphics Interchange Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">5</th>
+                      <td><a href="/jp/format/svg/"><strong>SVG</strong></a></td>
+                      <td>Scalable Vector Graphics</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">6</th>
+                      <td><a href="/jp/format/avif/"><strong>AVIF</strong></a></td>
+                      <td>AV1 Image File Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">7</th>
+                      <td><a href="/jp/format/heic/"><strong>HEIC</strong></a></td>
+                      <td>High Efficiency Image File Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">8</th>
+                      <td><a href="/jp/format/dds/"><strong>DDS</strong></a></td>
+                      <td>Microsoft Direct Draw Surface</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">9</th>
+                      <td><a href="/jp/format/psd/"><strong>PSD</strong></a></td>
+                      <td>Adobe Photoshop Bitmap File</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">10</th>
+                      <td><a href="/jp/format/dng/"><strong>DNG</strong></a></td>
+                      <td>Digital Negative</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">11</th>
+                      <td><a href="/jp/format/cr2/"><strong>CR2</strong></a></td>
+                      <td>Canon Digital Camera Raw Image Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">12</th>
+                      <td><a href="/jp/format/bmp/"><strong>BMP</strong></a></td>
+                      <td>Microsoft Windows Bitmap</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">13</th>
+                      <td><a href="/jp/format/tiff/"><strong>TIFF</strong></a></td>
+                      <td>Tagged Image File Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">14</th>
+                      <td><a href="/jp/format/ps/"><strong>PS</strong></a></td>
+                      <td>Adobe PostScript File</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">15</th>
+                      <td><a href="/jp/format/eps/"><strong>EPS</strong></a></td>
+                      <td>Adobe Encapsulated PostScript</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">16</th>
+                      <td><a href="/jp/format/jpeg/"><strong>JPEG</strong></a></td>
+                      <td>Joint Photographic Experts Group</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">17</th>
+                      <td><a href="/jp/format/jfif/"><strong>JFIF</strong></a></td>
+                      <td>JPEG File Interchange Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">18</th>
+                      <td><a href="/jp/format/jp2/"><strong>JP2</strong></a></td>
+                      <td>JPEG 2000</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">19</th>
+                      <td><a href="/jp/format/ico/"><strong>ICO</strong></a></td>
+                      <td>Microsoft Icon</td>
+                    </tr>
+                      <th scope="row">20</th>
+                      <td><a href="/jp/format/pdf/"><strong>PDF</strong></a></td>
+                      <td>Portable Document Format</td>
+                    
+                    <tr>
+                      <th scope="row">21</th>
+                      <td><strong>AAI</strong></td>
+                      <td>AAI Dune image</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">22</th>
+                      <td><strong>RAW</strong></td>
+                      <td>Camera Raw Image</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">23</th>
+                      <td><strong>AVS</strong></td>
+                      <td>AVS X image</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">24</th>
+                      <td><strong>CIN</strong></td>
+                      <td>Kodak Cineon Image Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">25</th>
+                      <td><strong>CMYK</strong></td>
+                      <td>Raw Image Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">26</th>
+                      <td><strong>CMYKA</strong></td>
+                      <td>Raw Image Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">27</th>
+                      <td><strong>CRW</strong></td>
+                      <td>Canon Digital Camera Raw Image Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">28</th>
+                      <td><strong>DCX</strong></td>
+                      <td>ZSoft IBM PC Multi-page Paintbrush Image</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">29</th>
+                      <td><strong>DIB</strong></td>
+                      <td>Microsoft Windows Device Independent Bitmap</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">30</th>
+                      <td><strong>DOT</strong></td>
+                      <td>Graph Visualization</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">31</th>
+                      <td><strong>DPX</strong></td>
+                      <td>SMPTE Digital Moving Picture Exchange</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">32</th>
+                      <td><strong>EPDF</strong></td>
+                      <td>Encapsulated Portable Document Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">33</th>
+                      <td><strong>EPI</strong></td>
+                      <td>Adobe Encapsulated PostScript Interchange Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">34</th>
+                      <td><strong>EPS2</strong></td>
+                      <td>Adobe Level II Encapsulated PostScript</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">35</th>
+                      <td><strong>EPS3</strong></td>
+                      <td>Adobe Level III Encapsulated PostScript</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">36</th>
+                      <td><strong>EPSF</strong></td>
+                      <td>Adobe Encapsulated PostScript</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">37</th>
+                      <td><strong>EPSI</strong></td>
+                      <td>Adobe Encapsulated PostScript Interchange Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">38</th>
+                      <td><strong>EPT</strong></td>
+                      <td>Adobe Encapsulated PostScript Interchange Format with TIFF Preview</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">39</th>
+                      <td><strong>EXR</strong></td>
+                      <td>High Dynamic-range File Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">40</th>
+                      <td><strong>FAX</strong></td>
+                      <td>Group 3 TIFF</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">41</th>
+                      <td><strong>GRAY</strong></td>
+                      <td>Raw Gray Samples</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">42</th>
+                      <td><strong>HDR</strong></td>
+                      <td>Radiance RGBE Image Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">43</th>
+                      <td><strong>HRZ</strong></td>
+                      <td>Slow Scane TeleVision</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">44</th>
+                      <td><strong>JNG</strong></td>
+                      <td>Multiple-image Network Graphics</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">45</th>
+                      <td><strong>J2C</strong></td>
+                      <td>JPEG-2000 Code Stream Syntax</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">46</th>
+                      <td><strong>J2K</strong></td>
+                      <td>JPEG-2000 Code Stream Syntax</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">47</th>
+                      <td><strong>MIFF</strong></td>
+                      <td>Magick Image File Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">48</th>
+                      <td><strong>MONO</strong></td>
+                      <td>Bi-level Bitmap in Least-significant-byte First Order</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">49</th>
+                      <td><strong>MNG</strong></td>
+                      <td>Multiple-image Network Graphics</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">50</th>
+                      <td><strong>MPC</strong></td>
+                      <td>Magick Persistent Cache Image File Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">51</th>
+                      <td><strong>MTV</strong></td>
+                      <td>MTV Raytracing Image Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">52</th>
+                      <td><strong>OTB</strong></td>
+                      <td>On-the-air Bitmap</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">53</th>
+                      <td><strong>PAM</strong></td>
+                      <td>Common 2-dimensional Bitmap Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">54</th>
+                      <td><strong>PBM</strong></td>
+                      <td>Portable Bitmap Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">55</th>
+                      <td><strong>PCD</strong></td>
+                      <td>Photo CD</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">56</th>
+                      <td><strong>PCL</strong></td>
+                      <td>HP Page Control Language</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">57</th>
+                      <td><strong>PCX</strong></td>
+                      <td>ZSoft IBM PC Paintbrush File</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">58</th>
+                      <td><strong>PFM</strong></td>
+                      <td>Portable Float Map Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">59</th>
+                      <td><strong>PGM</strong></td>
+                      <td>Portable Graymap Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">60</th>
+                      <td><strong>PICT</strong></td>
+                      <td>Apple Macintosh QuickDraw/PICT File</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">61</th>
+                      <td><strong>PNM</strong></td>
+                      <td>Portable Anymap</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">62</th>
+                      <td><strong>PPM</strong></td>
+                      <td>Portable Pixmap Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">63</th>
+                      <td><strong>PS2</strong></td>
+                      <td>Adobe Level II PostScript File</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">64</th>
+                      <td><strong>PS3</strong></td>
+                      <td>Adobe Level III PostScript File</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">65</th>
+                      <td><strong>PTIF</strong></td>
+                      <td>Pyramid Encoded TIFF</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">66</th>
+                      <td><strong>SGI</strong></td>
+                      <td>Irix RGB Image</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">67</th>
+                      <td><strong>SUN</strong></td>
+                      <td>SUN Rasterfile</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">68</th>
+                      <td><strong>TGA</strong></td>
+                      <td>Truevision Targa Image</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">69</th>
+                      <td><strong>TTF</strong></td>
+                      <td>TrueType Font File</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">70</th>
+                      <td><strong>UIL</strong></td>
+                      <td>X-Motif UIL Table</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">71</th>
+                      <td><strong>UYVY</strong></td>
+                      <td>Interleaved YUV Raw Image</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">72</th>
+                      <td><strong>VICAR</strong></td>
+                      <td>VICAR Rasterfile Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">73</th>
+                      <td><strong>VIFF</strong></td>
+                      <td>Khoros Visualization Image File Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">74</th>
+                      <td><strong>WBMP</strong></td>
+                      <td>Wireless Bitmap</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">75</th>
+                      <td><strong>WPG</strong></td>
+                      <td>Word Perfect Graphics File</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">76</th>
+                      <td><strong>XBM</strong></td>
+                      <td>X Windows System Bitmap</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">77</th>
+                      <td><strong>XPM</strong></td>
+                      <td>X Windows System Pixmap</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">78</th>
+                      <td><strong>ARW</strong></td>
+                      <td>Sony Digital Camera Alpha Raw Image Format</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">79</th>
+                      <td><strong>APNG</strong></td>
+                      <td>Animated Portable Network Graphics</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">80</th>
+                      <td><strong>QOI</strong></td>
+                      <td>Quite OK Image Format</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              Copyright &copy; 2024 Offline Converter - ファイルをアップロードせずに無料のオフラインコンバーター！ 全著作権所有。<a href="privacy.html" rel="nofollow">プライバシーポリシー</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="static/js/jquery.min.js"></script>
+<script src="static/js/bootstrap.bundle.min.js"></script>
+<script src="static/js/main.min.js"></script>
+<script src="static/js/image.min.js"></script>
+</body>
+</html>

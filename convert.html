@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html class="light" lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta name="description" content="在浏览器本地离线转换图片、视频、音频和文档，文件不上传服务器，保护隐私。" />
+  <title>在线转换 - AzureKiln Converter</title>
+  <!-- Material Symbols -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+  <script src="assets/tailwind.js"></script>
+  <script src="assets/tailwind.config.js"></script>
+  <link href="assets/css/site.css" rel="stylesheet" />
+  <script src="assets/vendor/jszip.min.js"></script>
+  <script src="assets/vendor/pdfjs/pdf.min.js"></script>
+  <script src="assets/vendor/ffmpeg/util.js"></script>
+  <script src="assets/vendor/ffmpeg/ffmpeg.js"></script>
+</head>
+
+<body class="bg-[#f7f9fb] dark:bg-slate-950 text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+  <div id="ak-header"></div>
+
+  <main class="pt-0">
+
+    <!-- ── 标题 ─────────────────────────────────── -->
+    <section class="px-8 pt-14 pb-6 max-w-7xl mx-auto">
+      <div class="max-w-3xl">
+        <span class="font-label text-xs tracking-[0.2em] text-primary block uppercase mb-3">Offline Converter</span>
+        <h1 id="tool-title" class="font-headline text-3xl md:text-4xl font-extrabold tracking-tighter text-on-surface mb-4">图片转换</h1>
+        <p id="tool-desc" class="text-secondary leading-relaxed"></p>
+      </div>
+    </section>
+
+    <!-- ── 工具页签 ──────────────────────────────── -->
+    <section class="px-8 pb-8 max-w-7xl mx-auto">
+      <div id="tool-tabs" class="flex gap-3 overflow-x-auto pb-2"></div>
+    </section>
+
+    <!-- ── 表单 & 结果 ───────────────────────────── -->
+    <section class="px-8 pb-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+
+      <!-- 转换表单 -->
+      <div class="lg:col-span-2 bg-surface-container-lowest rounded-3xl border border-outline-variant/20 p-6 md:p-8">
+        <div id="dropzone"
+          class="ak-dropzone cursor-pointer rounded-2xl border-2 border-dashed border-outline-variant/60 hover:border-primary/50 transition-colors flex flex-col items-center justify-center gap-3 py-10 px-6 text-center">
+          <div class="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center text-[#005ab7]">
+            <span class="material-symbols-outlined text-[30px]">upload_file</span>
+          </div>
+          <p id="dropzone-hint" class="text-sm text-secondary font-medium">点击选择或拖入文件（可多选）</p>
+          <input type="file" id="localfiles" multiple class="hidden" />
+        </div>
+
+        <div id="file-chips" class="flex flex-wrap gap-2 mt-4"></div>
+
+        <div id="target-wrap" class="mt-6">
+          <label class="block text-xs font-bold text-secondary mb-1.5">目标格式</label>
+          <select id="targetformat"
+            class="w-full bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3 py-2.5 text-sm text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"></select>
+        </div>
+
+        <div id="options-wrap" class="mt-6 space-y-6"></div>
+
+        <p id="engine-hint"
+          class="hidden mt-5 text-xs text-secondary bg-surface-container-low/60 border border-outline-variant/20 rounded-xl px-4 py-3 leading-relaxed"></p>
+
+        <p id="tool-tip" class="hidden mt-5 text-xs text-secondary leading-relaxed"></p>
+
+        <button id="convert-btn"
+          class="mt-7 w-full py-4 bg-[#005ab7] text-white rounded-xl font-bold hover:opacity-90 transition-all transform active:scale-[0.98] shadow-lg shadow-primary/20 flex items-center justify-center gap-2 disabled:cursor-not-allowed">
+          <span class="material-symbols-outlined text-[18px] align-[-3px]">bolt</span> 开始转换
+        </button>
+      </div>
+
+      <!-- 结果区 -->
+      <div class="lg:col-span-3 bg-surface-container-lowest rounded-3xl border border-outline-variant/20 p-6 md:p-8">
+        <div class="flex items-center justify-between mb-5">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-primary/5 flex items-center justify-center text-[#005ab7]">
+              <span class="material-symbols-outlined" data-icon="task_alt">task_alt</span>
+            </div>
+            <div>
+              <h3 class="font-headline text-lg font-bold text-on-surface">输出文件</h3>
+              <p id="results-count" class="text-xs text-secondary"></p>
+            </div>
+          </div>
+          <button id="zip-btn"
+            class="hidden px-4 py-2.5 rounded-xl bg-primary/5 text-[#005ab7] text-sm font-bold hover:bg-primary/10 transition-colors flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px]">folder_zip</span> 打包下载 ZIP
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="ak-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>源文件</th>
+                <th>输出</th>
+                <th class="text-right">状态 / 操作</th>
+              </tr>
+            </thead>
+            <tbody id="results-body">
+              <tr>
+                <td colspan="4" class="text-center text-secondary text-sm py-10">还没有任务，先在左侧选择文件吧</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <div id="ak-footer"></div>
+
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/engines/image.js"></script>
+  <script src="assets/js/engines/media.js"></script>
+  <script src="assets/js/engines/document.js"></script>
+  <script src="assets/js/convert.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="在您的网络浏览器中离线转换图片、视频、音频和文档文件，无需下载软件和上传文件！">
+  <title>离线转换文件，无需下载软件和上传文件！</title>
+  <link rel="stylesheet" href="/mdui/mdui.css">
+  <script src="/mdui/mdui.global.js"></script>
+</head>
+
+<body>
+
+  <div id="my-app">
+    <mdui-layout class="layout">
+      <mdui-top-app-bar class="appbar" variant="small" scroll-behavior="elevate" scroll-target=".app-layout-main">
+        <mdui-button-icon icon="home" class="menu-button" href="/"></mdui-button-icon>
+        <mdui-top-app-bar-title>AzureCloud</mdui-top-app-bar-title>
+        <div style="flex-grow: 1"></div>
+      </mdui-top-app-bar>
+      <mdui-layout-main class="app-layout-main">
+        <div id="firmware-page" class="page active">
+          <div class="mdui-prose" style="display: flex; justify-content: center; align-items: center;">
+            <mdui-card class="app-card" variant="outlined" style="max-width: 950px; width: 90vw;">
+              <h5 class="card-title">转换器对比</h5>
+              <p class="card-description">对比离线转换器和在线转换器：</p>
+              <div class="mdui-table" style="max-width: 900px; width: 80vw;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col"><strong>对比</strong></th>
+                      <th scope="col">离线转换器 (<a href="index.html">offlineconverter.com</a>)</th>
+                      <th scope="col">在线转换器 (<a href="https://www.aconvert.com">aconvert.com</a>)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row"><strong>文件隐私</strong></th>
+                      <td><span class="text-danger"><i data-feather="thumbs-up"></i> 最大程度保护您的隐私，因为所有文件都在本地转换</span></td>
+                      <td>文件将上传到在线服务器进行转换</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><strong>文件大小</strong></th>
+                      <td><span class="text-danger"><i data-feather="thumbs-up"></i> 最大 2 GB</span></td>
+                      <td>最大 200 MB</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><strong>转换时间</strong></th>
+                      <td><span class="text-danger"><i data-feather="thumbs-up"></i> 不限时</span></td>
+                      <td>最长 10 分钟</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><strong>转换速度</strong></th>
+                      <td><span class="text-danger"><i data-feather="thumbs-up"></i> 转换速度快</span></td>
+                      <td>转换速度慢</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><strong>资源占用</strong></th>
+                      <td>占用您电脑的CPU和内存资源，有时可能会导致您的浏览器没有响应</td>
+                      <td><span class="text-danger"><i data-feather="thumbs-up"></i> 不占用您电脑的CPU或内存资源</span></td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><strong>文件格式</strong></th>
+                      <td>110 多种文件格式</td>
+                      <td><span class="text-danger"><i data-feather="thumbs-up"></i> 260 多种文件格式</span></td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><strong>JAVASCRIPT</strong></th>
+                      <td>最大 32 mb</td>
+                      <td><span class="text-danger"><i data-feather="thumbs-up"></i> 不到 0.1 mb</span></td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><strong>浏览器兼容</strong></th>
+                      <td>仅适用支持 ES Modules, WebAssembly, Shared Array Buffer 和 Site Isolation 等新技术的网络浏览器</td>
+                      <td><span class="text-danger"><i data-feather="thumbs-up"></i> 支持各种网络浏览器</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </mdui-card>
+
+          </div>
+        </div>
+
+      </mdui-layout-main>
+
+    </mdui-layout>
+  </div>
+
+
+  <div class="page-container">
+    <div class="page-header">
+      <nav class="navbar navbar-expand-lg d-flex justify-content-between">
+        <div class="" id="navbarNav">
+          <ul class="navbar-nav" id="leftNav">
+            <li class="nav-item"><a class="nav-link" id="sidebar-toggle" href="javascript:void(0)"><i
+                  data-feather="arrow-left"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html">OfflineConverter.com</a></li>
+          </ul>
+        </div>
+        <div class="" id="headerNav">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="faq4.html" title="常见问题"><i
+                  data-feather="help-circle"></i></a></li>
+            <li class="nav-item dropdown"><a class="nav-link search-dropdown" href="javascript:void(0)"
+                id="languageDropDown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="语言"><i
+                  data-feather="globe"></i></a>
+              <div class="dropdown-menu dropdown-menu-end profile-drop-menu" aria-labelledby="languageDropDown">
+                <a class="dropdown-item" href="index.html">English</a><a class="dropdown-item"
+                  href="es.html">Español</a><a class="dropdown-item" href="pt.html">Português</a><a
+                  class="dropdown-item" href="jp.html">日本語</a><a class="dropdown-item" href="">中文简体</a><a
+                  class="dropdown-item" href="tw.html">中文繁體</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="page-sidebar">
+      <ul class="list-unstyled accordion-menu">
+        <li class="sidebar-title">索引页</li>
+        <li class="active-page"><a href=""><i data-feather="home"></i>首页</a></li>
+        <li><a href="format4.html"><i data-feather="layers"></i>格式</a></li>
+        <li><a href="tools4.html"><i data-feather="edit"></i>工具</a></li>
+        <li class="sidebar-title">离线转换器</li>
+        <li><a href="image4.html"><i data-feather="image"></i>图片</a></li>
+        <li><a href="video4.html"><i data-feather="film"></i>视频</a></li>
+        <li><a href="audio4.html"><i data-feather="volume-2"></i>音频</a></li>
+        <li><a href="document4.html"><i data-feather="file-text"></i>文档</a></li>
+        <li class="sidebar-title">在线转换器</li>
+        <li><a href="https://www.aconvert.com/cn/image/"><i data-feather="image"></i>图片</a></li>
+        <li><a href="https://www.aconvert.com/cn/video/"><i data-feather="film"></i>视频</a></li>
+        <li><a href="https://www.aconvert.com/cn/audio/"><i data-feather="volume-2"></i>音频</a></li>
+        <li><a href="https://www.aconvert.com/cn/document/"><i data-feather="file-text"></i>文档</a></li>
+      </ul>
+    </div>
+    <div class="page-content">
+      <div class="main-wrapper">
+        <div class="row">
+          <div class="col">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">离线转换器</h5>
+                <p class="card-description">在您的网络浏览器中直接使用 JavaScript 离线转换<a href="image4.html">图片</a>、<a
+                    href="video4.html">视频</a>、<a href="audio4.html">音频</a>和<a
+                    href="document4.html">文档</a>文件，无需下载软件和上传文件！ 离线转换器与在线转换器相反，它是为了最大限度地保护您的隐私，因为所有文件都是在本地转换而不是云服务器。
+                  离线转换器的另一个优点是每个文件大小可以达到 2GB，而很少有在线转换器支持大于 100MB 的文件。</p>
+                <p>请注意，一些网络浏览器不支持或不完全支持离线转换器。如果此离线转换器在您的网络浏览器中转换失败，请改用<a href="https://www.aconvert.com">在线转换器</a>。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="card">
+              <div class="card-body">
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="card stat-widget">
+              <div class="card-body">
+                <h5 class="card-title">离线转换</h5>
+                <div class="transactions-list">
+                  <div class="tr-item">
+                    <div class="tr-company-name">
+                      <div class="tr-icon tr-card-icon tr-card-bg-info text-danger"><a href="image4.html"><i
+                            data-feather="image"></i></a></div>
+                      <div class="tr-text">
+                        <h4><a href="image4.html">图片</a></h4>
+                        <p><a href="image4.html">离线转换图像文件</a></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="transactions-list">
+                  <div class="tr-item">
+                    <div class="tr-company-name">
+                      <div class="tr-icon tr-card-icon tr-card-bg-danger text-danger"><a href="video4.html"><i
+                            data-feather="film"></i></a></div>
+                      <div class="tr-text">
+                        <h4><a href="video4.html">视频</a></h4>
+                        <p><a href="video4.html">离线转换视频文件</a></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="transactions-list">
+                  <div class="tr-item">
+                    <div class="tr-company-name">
+                      <div class="tr-icon tr-card-icon tr-card-bg-warning text-warning"><a href="audio4.html"><i
+                            data-feather="volume-2"></i></a></div>
+                      <div class="tr-text">
+                        <h4><a href="audio4.html">音频</a></h4>
+                        <p><a href="audio4.html">离线转换音频文件</a></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="transactions-list">
+                  <div class="tr-item">
+                    <div class="tr-company-name">
+                      <div class="tr-icon tr-card-icon tr-card-bg-primary text-primary"><a href="document4.html"><i
+                            data-feather="file-text"></i></a></div>
+                      <div class="tr-text">
+                        <h4><a href="document4.html">文档</a></h4>
+                        <p><a href="document4.html">离线转换文档文件</a></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="card stat-widget">
+              <div class="card-body">
+                <h5 class="card-title">在线转换</h5>
+                <div class="transactions-list">
+                  <div class="tr-item">
+                    <div class="tr-company-name">
+                      <div class="tr-icon tr-card-icon tr-card-bg-info text-info"><a
+                          href="https://www.aconvert.com/cn/image/"><i data-feather="image"></i></a></div>
+                      <div class="tr-text">
+                        <h4><a href="https://www.aconvert.com/cn/image/">图片</a></h4>
+                        <p><a href="https://www.aconvert.com/cn/image/">在线转换图像文件</a></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="transactions-list">
+                  <div class="tr-item">
+                    <div class="tr-company-name">
+                      <div class="tr-icon tr-card-icon tr-card-bg-danger text-danger"><a
+                          href="https://www.aconvert.com/cn/video/"><i data-feather="film"></i></a></div>
+                      <div class="tr-text">
+                        <h4><a href="https://www.aconvert.com/cn/video/">视频</a></h4>
+                        <p><a href="https://www.aconvert.com/cn/video/">在线转换视频文件</a></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="transactions-list">
+                  <div class="tr-item">
+                    <div class="tr-company-name">
+                      <div class="tr-icon tr-card-icon tr-card-bg-warning text-warning"><a
+                          href="https://www.aconvert.com/cn/audio/"><i data-feather="volume-2"></i></a></div>
+                      <div class="tr-text">
+                        <h4><a href="https://www.aconvert.com/cn/audio/">音频</a></h4>
+                        <p><a href="https://www.aconvert.com/cn/audio/">在线转换音频文件</a></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="transactions-list">
+                  <div class="tr-item">
+                    <div class="tr-company-name">
+                      <div class="tr-icon tr-card-icon tr-card-bg-primary text-primary"><a
+                          href="https://www.aconvert.com/cn/document/"><i data-feather="file-text"></i></a></div>
+                      <div class="tr-text">
+                        <h4><a href="https://www.aconvert.com/cn/document/">文档</a></h4>
+                        <p><a href="https://www.aconvert.com/cn/document/">在线转换文档文件</a></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="card">
+              <div class="card-body">
+                Copyright &copy; 2024 Offline Converter - 免费离线转换器，无需下载软件和上传文件！保留所有权利。 <a href="privacy.html"
+                  rel="nofollow">隐私政策</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="static/js/jquery.min.js"></script>
+  <script src="static/js/bootstrap.bundle.min.js"></script>
+  <script src="static/js/main.min.js"></script>
+</body>
+
+</html>
