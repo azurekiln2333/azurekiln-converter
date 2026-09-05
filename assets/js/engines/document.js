@@ -17,6 +17,7 @@ const AKDocument = (() => {
   }
 
   /**
+   * 图片目标：每页一张图，返回数组
    * @returns {Promise<Array<{name:string, blob:Blob}>>}
    */
   async function convert(file, opts, onPage) {
@@ -48,5 +49,34 @@ const AKDocument = (() => {
     return out;
   }
 
-  return { convert };
+  /** TXT 目标：提取 PDF 全文为单个文本文件 */
+  async function extractText(file, onPage) {
+    const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+    const pages = [];
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      // 按 transform Y 坐标分行、X 排序，尽量还原阅读顺序
+      const lines = new Map();
+      for (const item of content.items) {
+        if (!item.str) continue;
+        const y = Math.round(item.transform[5]);
+        if (!lines.has(y)) lines.set(y, []);
+        lines.get(y).push({ x: item.transform[4], str: item.str });
+      }
+      const sorted = [...lines.entries()]
+        .sort((a, b) => b[0] - a[0])
+        .map(([, parts]) => parts.sort((a, b) => a.x - b.x).map(p => p.str).join(' '));
+      pages.push(`第 ${i} 页\n${'─'.repeat(24)}\n${sorted.join('\n')}`);
+      page.cleanup();
+      onPage && onPage(i, pdf.numPages);
+    }
+    const text = pages.join('\n\n');
+    return [{
+      name: AK_SITE.stripExt(file.name) + '.txt',
+      blob: new Blob([text], { type: 'text/plain;charset=utf-8' }),
+    }];
+  }
+
+  return { convert, extractText };
 })();

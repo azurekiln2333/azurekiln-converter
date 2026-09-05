@@ -9,12 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── 工具卡片 ── */
   const toolsHost = document.querySelector('#tools-grid .grid');
   const descShort = {
-    image: 'JPG / PNG / WEBP / HEIC / PSD 等四十余种图片格式互转。',
-    video: 'MP4 / MKV / WEBM / MOV 等主流视频格式本地转码。',
-    audio: 'MP3 / WAV / FLAC / M4A 等音频格式转换与音轨提取。',
-    document: '将 PDF 逐页渲染为 JPG / PNG / WEBP 图片。',
+    image: 'JPG / PNG / WEBP / HEIC / 相机 RAW 等 80+ 种图片格式互转。',
+    video: 'MP4 / MKV / WEBM / MOV 等 21 种视频格式本地转码。',
+    audio: 'MP3 / WAV / FLAC / APE / AC3 等 27 种音频格式转换与音轨提取。',
+    document: '将 PDF 逐页渲染为图片，或提取全文为 TXT。',
     'compress-video': '降低视频码率，显著缩小文件体积。',
     'compress-audio': '降低音频码率，快速压缩音乐与录音。',
+    zip: '任意文件打包为一个 ZIP，纯本地完成。',
+    unzip: '在浏览器里直接解压 ZIP 压缩包。',
   };
   toolsHost.innerHTML = Object.entries(AK_TOOLS).filter(([k]) => k !== 'pairsFor').map(([key, t]) => `
     <a href="convert.html?type=${key}"

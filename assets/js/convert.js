@@ -83,7 +83,7 @@
 
     // 目标格式
     const targetWrap = $('#target-wrap');
-    if (tool.hideTarget) {
+    if (tool.hideTarget || !tool.targets.length) {
       targetWrap.classList.add('hidden');
     } else {
       targetWrap.classList.remove('hidden');
@@ -110,14 +110,11 @@
       }
     }));
 
-    // 引擎提示
+    // 引擎提示与预取
     const needFFmpeg = ['video', 'audio', 'compress-video', 'compress-audio'].includes(state.tool);
     const hint = $('#engine-hint');
     hint.classList.toggle('hidden', !needFFmpeg);
-    if (needFFmpeg) {
-      hint.innerHTML = `<span class="material-symbols-outlined text-[16px] align-[-3px]">info</span>
-        首次使用需加载 FFmpeg 引擎（约 32MB，之后浏览器会缓存），请保持网络畅通。`;
-    }
+    if (needFFmpeg) startEnginePrefetch();
 
     // 文档工具的分页提示
     $('#tool-tip').textContent = tool.tip || '';
@@ -125,6 +122,44 @@
 
     // 文件选择框
     $('#localfiles').accept = tool.accept;
+  }
+
+  /* ── FFmpeg 引擎预取（后台下载 + 缓存 + 进度条）────────── */
+  let prefetchBound = false;
+
+  function hintHTML(text, percent) {
+    const bar = percent === undefined ? '' : `
+      <span class="inline-block align-middle w-40 h-1.5 rounded-full bg-surface-container-high overflow-hidden mx-1">
+        <span class="ak-progress block h-full rounded-full bg-[#005ab7]" style="width:${Math.round(percent * 100)}%"></span>
+      </span><span class="text-[#005ab7] font-bold">${Math.round(percent * 100)}%</span>`;
+    return `<span class="material-symbols-outlined text-[16px] align-[-3px]">downloading</span> ${text}${bar}`;
+  }
+
+  function startEnginePrefetch() {
+    const hint = $('#engine-hint');
+    if (AKMedia.isLoaded()) {
+      hint.innerHTML = hintHTML('FFmpeg 引擎已就绪（本地缓存）');
+      return;
+    }
+    if (!prefetchBound) {
+      prefetchBound = true;
+      AKMedia.onEngineProgress(info => {
+        if (info.stage === 'start') hint.innerHTML = hintHTML('正在准备 FFmpeg 引擎…', 0);
+        else if (info.stage === 'core-done') hint.innerHTML = hintHTML('正在下载引擎主文件（约 32MB，仅此一次）…', 0.02);
+        else if (info.stage === 'download') hint.innerHTML = hintHTML('正在下载引擎主文件（约 32MB，仅此一次）…', info.percent);
+        else if (info.stage === 'ready') hint.innerHTML = hintHTML('引擎已下载，可随时开始转换');
+      });
+    }
+    if (!state.prefetchStarted) {
+      state.prefetchStarted = true;
+      AKMedia.prefetch().then(() => {
+        if (state.tool && ['video', 'audio', 'compress-video', 'compress-audio'].includes(state.tool))
+          $('#engine-hint').innerHTML = hintHTML('引擎已缓存，转换时将直接从本地读取');
+      }).catch(() => {
+        if (state.tool && ['video', 'audio', 'compress-video', 'compress-audio'].includes(state.tool))
+          $('#engine-hint').innerHTML = hintHTML('引擎将在开始转换时加载');
+      });
+    }
   }
 
   /* ── 文件列表 ─────────────────────────────────────────── */
@@ -135,7 +170,7 @@
 
   function renderFileList() {
     const tool = AK_TOOLS[state.tool];
-    $('#dropzone-hint').textContent =
+    $('#dropzone-hint').textContent = tool.dropText ||
       `点击选择或拖入 ${tool.label.replace('转换', '').replace('压缩', '')}文件（可多选，上限 2GB / 文件）`;
     const wrap = $('#file-chips');
     wrap.innerHTML = state.files.map((f, i) => `
@@ -201,8 +236,15 @@
 
   async function ensureEngines() {
     if (['video', 'audio', 'compress-video', 'compress-audio'].includes(state.tool)) {
-      if (!AKMedia.isLoaded()) AK_SITE.toast('正在加载 FFmpeg 引擎，首次约需 30 秒…', 'info');
-      await AKMedia.load();
+      const hint = $('#engine-hint');
+      if (!AKMedia.isLoaded()) {
+        const off = AKMedia.onEngineProgress(info => {
+          if (info.stage === 'download') hint.innerHTML = hintHTML('正在下载引擎主文件（约 32MB，仅此一次）…', info.percent);
+        });
+        AK_SITE.toast('正在加载 FFmpeg 引擎，首次约需 30 秒…', 'info');
+        try { await AKMedia.load(); } finally { off(); }
+        hint.innerHTML = hintHTML('FFmpeg 引擎已就绪（已存入本地缓存，下次秒开）');
+      }
     }
   }
 
@@ -221,6 +263,29 @@
     try { await ensureEngines(); } catch (e) {
       AK_SITE.toast('FFmpeg 引擎加载失败：' + e.message, 'err');
       state.results.forEach(r => { if (r.status === 'pending') { r.status = 'error'; r.error = '引擎加载失败'; } });
+      finishRun();
+      return;
+    }
+
+    /* ZIP 打包：全部文件 → 单个压缩包 */
+    if (state.tool === 'zip') {
+      const r = state.results[0];
+      r.inName = `${state.files.length} 个文件`;
+      r.status = 'running';
+      r.progress = 0;
+      renderResults();
+      try {
+        const { blob, name } = await AKArchive.pack(state.files, p => { r.progress = p; renderResults(); });
+        r.outName = name;
+        r.blob = blob;
+        r.size = blob.size;
+        r.status = 'done';
+        r.progress = 1;
+      } catch (e) {
+        console.error(e);
+        r.status = 'error';
+        r.error = (e && e.message) || '打包失败';
+      }
       finishRun();
       return;
     }
@@ -244,13 +309,22 @@
         } else if (state.tool === 'audio') {
           outs = [await AKMedia.convertAudio(file, opts)];
         } else if (state.tool === 'document') {
-          const pages = await AKDocument.convert(file, opts,
-            (pi, total) => onProgress(pi / total));
-          outs = pages;
+          if (opts.target === 'txt') {
+            outs = await AKDocument.extractText(file, (pi, total) => onProgress(pi / total));
+          } else {
+            outs = await AKDocument.convert(file, opts,
+              (pi, total) => onProgress(pi / total));
+          }
         } else if (state.tool === 'compress-video') {
           outs = [await AKMedia.compressVideo(file, opts, s => onStatus(s), onProgress)];
         } else if (state.tool === 'compress-audio') {
           outs = [await AKMedia.compressAudio(file, opts)];
+        } else if (state.tool === 'zip') {
+          // 所有文件合并打包为一个 ZIP：在循环外处理，这里跳过
+          outs = [];
+        } else if (state.tool === 'unzip') {
+          const entries = await AKArchive.unpack(file, p => onProgress(p));
+          outs = entries;
         }
         // 文档工具多页输出 → 多行结果
         outs.forEach((o, k) => {

@@ -1,27 +1,39 @@
 /* =====================================================================
- * 音视频引擎：FFmpeg.wasm 0.12（本地 vendor，首次加载约 32MB 后缓存）
+ * 音视频引擎：FFmpeg.wasm 0.12（本地 vendor）
+ *
+ * 加载策略（解决"首次要下载 32MB 很慢"的问题）：
+ *  1. 选中视频/音频工具时立即在后台预取，不阻塞页面操作；
+ *  2. 引擎文件通过 Cache Storage 永久缓存——首次下载后，之后打开页面
+ *     直接从缓存读取（毫秒级），不再依赖易被驱逐的 HTTP 缓存；
+ *  3. 下载过程实时汇报进度（wasm 占 32MB），UI 显示进度条；
+ *  4. blob URL 加载失败时自动回退直连 URL，保证可用性。
  * ===================================================================*/
 
 const AKMedia = (() => {
   const V_MIME = {
     mp4: 'video/mp4', m4v: 'video/x-m4v', mkv: 'video/x-matroska', mov: 'video/quicktime',
-    webm: 'video/webm', avi: 'video/x-msvideo', flv: 'video/x-flv', wmv: 'video/x-ms-wmv',
-    mpg: 'video/mpeg', vob: 'video/mpeg', m2ts: 'video/mp2t', asf: 'video/x-ms-asf',
-    ogv: 'video/ogg', gif: 'image/gif',
+    webm: 'video/webm', avi: 'video/x-msvideo', flv: 'video/x-flv', f4v: 'video/x-f4v',
+    wmv: 'video/x-ms-wmv', mpg: 'video/mpeg', vob: 'video/mpeg', ts: 'video/mp2t',
+    m2ts: 'video/mp2t', asf: 'video/x-ms-asf', ogv: 'video/ogg', mxf: 'application/mxf',
+    '3gp': 'video/3gpp', '3g2': 'video/3gpp2', gif: 'image/gif', prores: 'video/quicktime',
   };
   const A_MIME = {
     mp3: 'audio/mpeg', wav: 'audio/wav', ogg: 'audio/ogg', aac: 'audio/aac',
-    m4a: 'audio/mp4', flac: 'audio/flac', opus: 'audio/opus', wma: 'audio/x-ms-wma',
-    aiff: 'audio/aiff', au: 'audio/basic', mka: 'audio/x-matroska',
+    m4a: 'audio/mp4', m4b: 'audio/mp4', flac: 'audio/flac', opus: 'audio/opus',
+    wma: 'audio/x-ms-wma', aiff: 'audio/aiff', au: 'audio/basic', mka: 'audio/x-matroska',
+    ac3: 'audio/ac3', eac3: 'audio/eac3', dts: 'audio/vnd.dts', caf: 'audio/x-caf',
+    tta: 'audio/x-tta', wv: 'audio/x-wavpack',
   };
-  const VIDEO_EXT = new Set(['mp4', 'mov', 'mkv', 'webm', 'avi', 'flv', 'wmv', 'mpg', 'mpeg',
-    'm4v', 'vob', 'm2ts', 'ts', 'asf', 'ogv', '3gp', 'gif']);
+  const VIDEO_EXT = new Set(['mp4', 'mov', 'mkv', 'webm', 'avi', 'flv', 'f4v', 'wmv', 'mpg', 'mpeg',
+    'm4v', 'vob', 'ts', 'm2ts', 'mts', 'asf', 'ogv', 'mxf', '3gp', '3g2', 'rm', 'rmvb', 'swf', 'gif']);
 
   const VIDEO_ARGS = {
     mp4:  ['-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart'],
     m4v:  ['-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k'],
     mkv:  ['-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k'],
     mov:  ['-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k'],
+    f4v:  ['-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k'],
+    ts:   ['-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-f', 'mpegts'],
     m2ts: ['-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-f', 'mpegts'],
     webm: ['-c:v', 'libvpx', '-deadline', 'realtime', '-cpu-used', '5', '-c:a', 'libvorbis'],
     ogv:  ['-c:v', 'libtheora', '-qscale:v', '7', '-c:a', 'libvorbis'],
@@ -31,6 +43,11 @@ const AKMedia = (() => {
     asf:  ['-c:v', 'wmv2', '-qscale:v', '6', '-c:a', 'wmav2'],
     mpg:  ['-c:v', 'mpeg2video', '-qscale:v', '5', '-c:a', 'mp2'],
     vob:  ['-c:v', 'mpeg2video', '-qscale:v', '5', '-c:a', 'mp2', '-f', 'vob'],
+    mxf:  ['-c:v', 'mpeg2video', '-qscale:v', '5', '-c:a', 'mp2', '-f', 'mxf'],
+    prores: ['-c:v', 'prores', '-profile:v', '3', '-c:a', 'pcm_s16le', '-f', 'mov'],
+    /* h263 要求宽高为 4 的倍数，无自定义分辨率时用表达式兜底 */
+    '3gp':  ['-c:v', 'h263', '-qscale:v', '5', '-c:a', 'aac'],
+    '3g2':  ['-c:v', 'h263', '-qscale:v', '5', '-c:a', 'aac'],
   };
 
   const AUDIO_ARGS = {
@@ -39,19 +56,34 @@ const AKMedia = (() => {
     ogg:  ['-c:a', 'libvorbis'],
     aac:  ['-c:a', 'aac'],
     m4a:  ['-c:a', 'aac'],
+    m4b:  ['-c:a', 'aac'],
     flac: ['-c:a', 'flac'],
     opus: ['-c:a', 'libopus'],
     wma:  ['-c:a', 'wmav2'],
     aiff: ['-c:a', 'pcm_s16be'],
     au:   ['-c:a', 'pcm_s16be'],
     mka:  ['-c:a', 'aac'],
+    ac3:  ['-c:a', 'ac3'],
+    eac3: ['-c:a', 'eac3'],
+    dts:  ['-c:a', 'dca'],
+    caf:  ['-c:a', 'alac'],
+    tta:  ['-c:a', 'tta'],
+    wv:   ['-c:a', 'wavpack'],
   };
 
+  /* 输出扩展名与工具 target 不同名的情形 */
+  const OUT_EXT = { prores: 'mov' };
+
+  /* ── 引擎加载状态 ────────────────────────────────────── */
+  const CORE_VER = '0.12.6';
+  const CACHE_NAME = 'ak-ffmpeg-' + CORE_VER;
   let ffmpeg = null;
   let loadPromise = null;
-  let logSink = null;          // (line) => void
-  let progressSink = null;     // (0..1) => void
-  const recentLogs = [];       // 环形日志缓冲，用于失败时定位原因
+  let prefetchPromise = null;
+  let progressListeners = [];   // (info {stage, percent, loaded, total}) => void
+  let logSink = null;
+  let progressSink = null;
+  const recentLogs = [];
 
   function pushLog(line) {
     recentLogs.push(line);
@@ -59,29 +91,113 @@ const AKMedia = (() => {
     logSink && logSink(line);
   }
 
-  /** 加载引擎（幂等） */
+  function emitProgress(info) {
+    progressListeners.forEach(fn => { try { fn(info); } catch {} });
+  }
+
+  /** 带进度（与可选缓存）的资源获取，返回 Blob */
+  async function fetchAsset(url, cache, onProg) {
+    if (cache) {
+      const hit = await cache.match(url);
+      if (hit) {
+        onProg && onProg({ stage: 'cache', percent: 1 });
+        return hit.blob();
+      }
+    }
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`引擎文件下载失败（${resp.status}）`);
+    const total = Number(resp.headers.get('Content-Length')) || 0;
+    if (!resp.body || !total) {
+      const blob = await resp.blob();
+      if (cache) await cache.put(url, new Response(blob.slice(0)));
+      onProg && onProg({ stage: 'download', percent: 1 });
+      return blob;
+    }
+    const reader = resp.body.getReader();
+    const chunks = [];
+    let loaded = 0;
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value);
+      loaded += value.length;
+      onProg && onProg({ stage: 'download', percent: loaded / total, loaded, total });
+    }
+    const blob = new Blob(chunks, { type: resp.headers.get('Content-Type') || 'application/octet-stream' });
+    if (cache) {
+      try { await cache.put(url, new Response(blob.slice(0))); } catch {} // 隐私模式下可能失败，忽略
+    }
+    return blob;
+  }
+
+  /** 后台预取引擎：下载并缓存 core.js + core.wasm，返回 {coreURL, wasmURL}（blob: 或直连） */
+  function prefetch() {
+    if (prefetchPromise) return prefetchPromise;
+    prefetchPromise = (async () => {
+      const base = new URL('assets/vendor/ffmpeg/', document.baseURI).href;
+      const coreURL0 = base + 'ffmpeg-core.js';
+      const wasmURL0 = base + 'ffmpeg-core.wasm';
+      const cache = ('caches' in window) ? await caches.open(CACHE_NAME).catch(() => null) : null;
+      emitProgress({ stage: 'start', percent: 0 });
+      const coreBlob = await fetchAsset(coreURL0, cache, p => emitProgress({ ...p, asset: 'core' }));
+      emitProgress({ stage: 'core-done', percent: 0.02 });
+      const wasmBlob = await fetchAsset(wasmURL0, cache, p => emitProgress({
+        ...p, asset: 'wasm',
+        // wasm 占总量的 98%
+        percent: p.stage === 'cache' ? 1 : 0.02 + p.percent * 0.98,
+        loaded: p.loaded, total: p.total,
+      }));
+      emitProgress({ stage: 'ready', percent: 1 });
+      return {
+        coreURL: URL.createObjectURL(coreBlob),
+        wasmURL: URL.createObjectURL(wasmBlob),
+      };
+    })();
+    prefetchPromise.catch(() => { prefetchPromise = null; });
+    return prefetchPromise;
+  }
+
+  /** 加载引擎（幂等）。优先使用预取的缓存，失败回退直连 URL。 */
   function load() {
     if (loadPromise) return loadPromise;
     loadPromise = (async () => {
+      let urls;
+      try {
+        urls = await prefetch();
+      } catch {
+        const base = new URL('assets/vendor/ffmpeg/', document.baseURI).href;
+        urls = { coreURL: base + 'ffmpeg-core.js', wasmURL: base + 'ffmpeg-core.wasm' };
+      }
       const { FFmpeg } = FFmpegWASM;
       ffmpeg = new FFmpeg();
       ffmpeg.on('log', ({ message }) => pushLog(message));
       ffmpeg.on('progress', ({ progress }) => {
         progressSink && progressSink(Math.max(0, Math.min(1, progress || 0)));
       });
-      const base = new URL('assets/vendor/ffmpeg/', document.baseURI).href;
-      await ffmpeg.load({
-        coreURL: base + 'ffmpeg-core.js',
-        wasmURL: base + 'ffmpeg-core.wasm',
-        classWorkerURL: new URL('assets/vendor/ffmpeg/worker.js', document.baseURI).href,
-      });
+      const classWorkerURL = new URL('assets/vendor/ffmpeg/worker.js', document.baseURI).href;
+      try {
+        await ffmpeg.load({ ...urls, classWorkerURL });
+      } catch (e) {
+        // blob URL 在个别内核的 module worker 里不可动态 import，回退直连
+        const base = new URL('assets/vendor/ffmpeg/', document.baseURI).href;
+        await ffmpeg.load({
+          coreURL: base + 'ffmpeg-core.js',
+          wasmURL: base + 'ffmpeg-core.wasm',
+          classWorkerURL,
+        });
+      }
+      urls.coreURL && urls.coreURL.startsWith('blob:') && URL.revokeObjectURL(urls.coreURL);
+      urls.wasmURL && urls.wasmURL.startsWith('blob:') && URL.revokeObjectURL(urls.wasmURL);
       return ffmpeg;
     })();
-    loadPromise.catch(() => { loadPromise = null; }); // 失败允许重试
+    loadPromise.catch(() => { loadPromise = null; });
     return loadPromise;
   }
 
   const isLoaded = () => !!loadPromise;
+  const onEngineProgress = (fn) => { progressListeners.push(fn); return () => {
+    progressListeners = progressListeners.filter(f => f !== fn);
+  }; };
 
   function extOf(name) {
     const i = name.lastIndexOf('.');
@@ -104,7 +220,6 @@ const AKMedia = (() => {
    *  必须检查返回码，否则会去读不存在的输出文件。 */
   function checkExit(ret, stage) {
     if (ret === 0) return;
-    const tail = recentLogs.slice(-25).join('\n');
     const errLine = [...recentLogs].reverse().find(l =>
       /error|invalid|no such|unable|failed|not found|cannot|doesn't|denied/i.test(l));
     throw new Error(errLine ? errLine.slice(0, 200) : `FFmpeg 处理失败（${stage}，exit ${ret}）`);
@@ -132,7 +247,7 @@ const AKMedia = (() => {
   /** 视频转换（video 工具） */
   async function convertVideo(file, opts, onProgress) {
     const target = opts.target;
-    const outName = AK_SITE.stripExt(file.name) + '.' + target;
+    let outName = AK_SITE.stripExt(file.name) + '.' + (OUT_EXT[target] || target);
     let args = ['-y'];
 
     if (target === 'gif') {
@@ -145,7 +260,12 @@ const AKMedia = (() => {
       );
     } else {
       args.push(...(VIDEO_ARGS[target] || VIDEO_ARGS.mp4));
-      if (opts.vsize) args.push('-vf', 'scale=' + opts.vsize);
+      if (target === '3gp' || target === '3g2') {
+        // h263 需要宽高为 4 的倍数
+        args.push('-vf', opts.vsize ? 'scale=' + opts.vsize : 'scale=trunc(iw/4)*4:trunc(ih/4)*4');
+      } else if (opts.vsize) {
+        args.push('-vf', 'scale=' + opts.vsize);
+      }
       if (opts.vbitrate) args.push('-b:v', opts.vbitrate);
       if (opts.fps) args.push('-r', opts.fps);
       if (opts.abitrate && !opts.noaudio) args.push('-b:a', opts.abitrate);
@@ -169,7 +289,6 @@ const AKMedia = (() => {
 
   /** 视频压缩（compress-video 工具）→ mp4 */
   async function compressVideo(file, opts, onStatus, onProgress) {
-    // 先用 ffmpeg 探测源码率
     onStatus && onStatus('读取媒体信息…');
     const logLines = [];
     logSink = (l) => logLines.push(l);
@@ -217,5 +336,8 @@ const AKMedia = (() => {
     return { blob, name: outName, info: `目标码率 ${abitrate}` };
   }
 
-  return { load, isLoaded, convertVideo, convertAudio, compressVideo, compressAudio };
+  return {
+    load, prefetch, isLoaded, onEngineProgress,
+    convertVideo, convertAudio, compressVideo, compressAudio,
+  };
 })();
