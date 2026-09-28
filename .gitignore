@@ -1,2 +1,21 @@
 tests/sample.mp4
 *.log
+
+# Trellis generates platform adapters locally; only .trellis is shared.
+/.agent/
+/.agents/
+/.claude/
+/.codebuddy/
+/.codex/
+/.cursor/
+/.dsh/
+/.gemini/
+/.github/
+/.kilocode/
+/.omp/
+/.opencode/
+/.pi/
+/.qoder/
+/.reasonix/
+/.trae/
+/.zcode/

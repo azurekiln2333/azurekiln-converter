@@ -1,0 +1,2 @@
+# Keep developer journals mergeable across parallel sessions.
+workspace/*/journal-*.md merge=union
