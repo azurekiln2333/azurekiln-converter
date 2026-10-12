@@ -32,7 +32,6 @@ azurekiln-converter/
 │       └── jszip.min.js     ZIP 打包解压
 ├── tests/                  自测样例文件（png / mp4 / pdf / wav / 真实 pdf）
 ├── dev-server.js           本地预览静态服务器（node dev-server.js [端口]）
-└── _legacy/                旧版 89 个 HTML / PHP / 旧引擎（已归档，可整体删除）
 ```
 
 ## 本地预览
@@ -47,7 +46,7 @@ Cache Storage（引擎持久缓存）在 localhost 与 https 下可用。
 
 ## 部署
 
-整站为纯静态文件，把项目目录（不含 `_legacy/`、`tests/`、`dev-server.js`）
+整站为纯静态文件，把项目目录（不含 `tests/`、`dev-server.js`）
 放到任意 Web 服务器目录即可，例如主站下 `/converter/`：
 
 - nginx：`location /converter/ { alias /path/to/azurekiln-converter/; }`
